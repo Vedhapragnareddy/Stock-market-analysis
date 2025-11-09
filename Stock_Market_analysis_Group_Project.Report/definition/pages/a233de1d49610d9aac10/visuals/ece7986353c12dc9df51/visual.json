@@ -1,0 +1,222 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.2.0/schema.json",
+  "name": "ece7986353c12dc9df51",
+  "position": {
+    "x": 0,
+    "y": 14.826254826254827,
+    "z": 0,
+    "height": 351.87644787644786,
+    "width": 693.86872586872585
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "stocks_combined"
+                    }
+                  },
+                  "Property": "Symbol"
+                }
+              },
+              "queryRef": "stocks_combined.Symbol",
+              "nativeQueryRef": "Symbol"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "stocks_combined"
+                    }
+                  },
+                  "Property": "Date of Max 7 Day Avg Close"
+                }
+              },
+              "queryRef": "stocks_combined.Date of Max 7 Day Avg Close",
+              "nativeQueryRef": "Date of Max 7 Day Avg Close"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "stocks_combined"
+                    }
+                  },
+                  "Property": "Max 7 Day Avg Close"
+                }
+              },
+              "queryRef": "stocks_combined.Max 7 Day Avg Close",
+              "nativeQueryRef": "Max 7 Day Avg Close"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "stocks_combined"
+                  }
+                },
+                "Property": "Max 7 Day Avg Close"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "total": [
+        {
+          "properties": {
+            "totals": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "246.03112285356875D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "stocks_combined.Max 7 Day Avg Close"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "276.27167582645814D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "stocks_combined.Date of Max 7 Day Avg Close"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "147.1767728041035D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "stocks_combined.Symbol"
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "grid": [
+        {
+          "properties": {
+            "gridHorizontal": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "14D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Maximum 7-Day Average Close Price by Stock (2010–2025)'"
+                }
+              }
+            },
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'center'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

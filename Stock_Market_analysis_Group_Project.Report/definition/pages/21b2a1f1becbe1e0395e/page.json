@@ -1,0 +1,8 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.0.0/schema.json",
+  "name": "21b2a1f1becbe1e0395e",
+  "displayName": "Avg Close by Sector",
+  "displayOption": "FitToPage",
+  "height": 720,
+  "width": 1280
+}

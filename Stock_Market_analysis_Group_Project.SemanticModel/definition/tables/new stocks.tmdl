@@ -1,0 +1,120 @@
+table 'new stocks'
+	lineageTag: 157a11a7-8e17-4867-bce3-b7ac0693912a
+
+	column Symbol
+		dataType: string
+		lineageTag: b45df9de-ac8b-49d2-851b-eb0cf156a3f9
+		summarizeBy: none
+		sourceColumn: Symbol
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 003b3174-405d-41e4-8819-152737b66872
+		summarizeBy: none
+		sourceColumn: Date
+
+		variation Variation
+			isDefault
+			relationship: 714dfbd9-02b6-4817-8aee-3d539965086e
+			defaultHierarchy: LocalDateTable_81b7db91-7c1b-4763-b93b-95546905e356.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Open
+		dataType: double
+		lineageTag: a99f241e-90d8-47b7-9347-963e63f330aa
+		summarizeBy: sum
+		sourceColumn: Open
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column High
+		dataType: double
+		lineageTag: ebf3337c-bab5-423f-baca-e1e0790ae0f6
+		summarizeBy: sum
+		sourceColumn: High
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Low
+		dataType: double
+		lineageTag: 8ec3b70e-acb2-4580-bcbf-dde86ed2827e
+		summarizeBy: sum
+		sourceColumn: Low
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Close
+		dataType: double
+		lineageTag: 7db525e2-4bba-42a8-a048-893c88be2244
+		summarizeBy: sum
+		sourceColumn: Close
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Adj Close'
+		dataType: double
+		lineageTag: ca04615f-6cdf-4afa-b386-e710116d007e
+		summarizeBy: sum
+		sourceColumn: Adj Close
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Volume
+		dataType: int64
+		formatString: 0
+		lineageTag: d298dc76-7cba-4369-a3a4-5d7024bba36d
+		summarizeBy: sum
+		sourceColumn: Volume
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'new stocks' = m
+		mode: import
+		source =
+				let
+				    Source = Folder.Files("C:\Users\C837319113\Downloads\Power BI group project\Dataset\new stocks"),
+				    #"Filtered Hidden Files1" = Table.SelectRows(Source, each [Attributes]?[Hidden]? <> true),
+				    #"Invoke Custom Function1" = Table.AddColumn(#"Filtered Hidden Files1", "Transform File (2)", each #"Transform File (2)"([Content])),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Invoke Custom Function1", {"Name", "Source.Name"}),
+				    #"Removed Other Columns1" = Table.SelectColumns(#"Renamed Columns1", {"Source.Name", "Transform File (2)"}),
+				    #"Expanded Table Column1" = Table.ExpandTableColumn(#"Removed Other Columns1", "Transform File (2)", Table.ColumnNames(#"Transform File (2)"(#"Sample File (2)"))),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Expanded Table Column1",{{"Source.Name", type text}, {"Column1", type text}, {"Column2", type text}, {"Column3", type text}, {"Column4", type text}, {"Column5", type text}, {"Column6", type text}}),
+				    #"Removed Top Rows" = Table.Skip(#"Changed Type",2),
+				    #"Filtered Rows" = Table.SelectRows(#"Removed Top Rows", each [Source.Name] <> null and [Source.Name] <> ""),
+				    #"Removed Top Rows1" = Table.Skip(#"Filtered Rows",1),
+				    #"Renamed Columns" = Table.RenameColumns(#"Removed Top Rows1",{{"Column1", "Date"}, {"Column2", "Close"}, {"Column3", "High"}, {"Column4", "Low"}, {"Column5", "Open"}, {"Column6", "Volume"}, {"Source.Name", "Symbol"}}),
+				    #"Added Custom" = Table.AddColumn(#"Renamed Columns", "Custom", each Text.BeforeDelimiter([Symbol], ".")),
+				    #"Replaced Value" = Table.ReplaceValue(#"Added Custom",".csv","",Replacer.ReplaceText,{"Symbol"}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Replaced Value",{"Custom"}),
+				    #"Added Custom1" = Table.AddColumn(#"Removed Columns", "Adj Close", each [Close]),
+				    #"Reordered Columns" = Table.ReorderColumns(#"Added Custom1",{"Symbol", "Date", "Open", "High", "Low", "Close", "Adj Close", "Volume"}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Reordered Columns",{{"Date", type date}, {"Open", type number}, {"High", type number}, {"Low", type number}, {"Close", type number}, {"Adj Close", type number}, {"Volume", Int64.Type}}),
+				    #"Duplicated Column" = Table.DuplicateColumn(#"Changed Type1", "Date", "Date - Copy"),
+				    #"Changed Type2" = Table.TransformColumnTypes(#"Duplicated Column",{{"Date - Copy", type date}}),
+				    #"Replaced Errors" = Table.ReplaceErrorValues(#"Changed Type2", {{"Date - Copy", #date(2025, 4, 26)}}),
+				    #"Sorted Rows" = Table.Sort(#"Replaced Errors",{{"Date - Copy", Order.Descending}}),
+				    #"Removed Top Rows2" = Table.Skip(#"Sorted Rows",27),
+				    #"Removed Columns1" = Table.RemoveColumns(#"Removed Top Rows2",{"Date - Copy"})
+				in
+				    #"Removed Columns1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,87 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 0,
+            "y": 0
+          },
+          "nodeIndex": "stocks",
+          "nodeLineageTag": "a1c04d3d-eb8c-4a84-b78c-043d32d97790",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 394,
+            "y": 314
+          },
+          "nodeIndex": "DateTable",
+          "nodeLineageTag": "a7661274-85c6-43cc-8c72-40eb998cf33b",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 397,
+            "y": 0
+          },
+          "nodeIndex": "StockSectors",
+          "nodeLineageTag": "b7f8fd8d-2704-41c5-9f2c-9768c06ead02",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 1297,
+            "y": 424
+          },
+          "nodeIndex": "new stocks",
+          "nodeLineageTag": "157a11a7-8e17-4867-bce3-b7ac0693912a",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 838,
+            "y": 29
+          },
+          "nodeIndex": "stocks_combined",
+          "nodeLineageTag": "16f85844-1b81-4372-a4c4-097538334427",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

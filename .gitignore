@@ -1,0 +1,23 @@
+# -----------------------------------------------------------------------------------
+# Power BI Project (.pbip) - Standard Ignored Files
+# -----------------------------------------------------------------------------------
+
+# Data Cache (Essential to Ignore)
+**/*.SemanticModel/cache.abf
+
+# User/Local Settings and Metadata (Essential to Ignore)
+**/*.pbi/localSettings.json
+**/*.SemanticModel/.platform
+
+# Hidden temporary folders created by Power BI Desktop
+**/*.SemanticModel/.pbi/
+**/*.Report/.pbi/
+
+# Custom Visuals Cache
+CustomVisuals/
+
+# -----------------------------------------------------------------------------------
+# General System Files (Good Practice)
+# -----------------------------------------------------------------------------------
+.DS_Store
+Thumbs.db

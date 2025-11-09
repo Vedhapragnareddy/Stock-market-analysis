@@ -1,0 +1,30 @@
+table StockSectors
+	lineageTag: b7f8fd8d-2704-41c5-9f2c-9768c06ead02
+
+	column Symbol
+		dataType: string
+		lineageTag: bda2ec6a-376c-4815-bf4c-fff6c8608c91
+		summarizeBy: none
+		sourceColumn: Symbol
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sector
+		dataType: string
+		lineageTag: e38a9c4d-6cce-4c95-96aa-375bbf4c0d7b
+		summarizeBy: none
+		sourceColumn: Sector
+
+		annotation SummarizationSetBy = Automatic
+
+	partition StockSectors = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("ZczRCoMgFIDhVxnnupewmttcNUHZjXghIkswT5QN9vZzdTdvP35+pYAQ3kEF0tkxYsDXB3SloBdUljo8W1IqG1jGqzMhjdYsbkdOzyVebl2btfaY8mInKbrfkmwJJ0z+fYQ1aTJSH020hzDe/8n9kaHBuG6TW04imTm4FbT+Ag==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Symbol = _t, Sector = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Symbol", type text}, {"Sector", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

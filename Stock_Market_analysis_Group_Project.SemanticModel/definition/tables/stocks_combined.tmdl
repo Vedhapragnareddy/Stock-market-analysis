@@ -1,0 +1,241 @@
+table stocks_combined
+	lineageTag: 16f85844-1b81-4372-a4c4-097538334427
+
+	measure 7_Day_Avg_Close =
+			
+			CALCULATE(
+			    AVERAGE('stocks_combined'[Close]),
+			    DATESINPERIOD('DateTable'[Date], MAX('stocks_combined'[Date]), -7, DAY)
+			)
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: ec15a5af-0989-4cd4-b420-2c5d59ed4ebf
+
+	measure 'Avg Daily Volume' = AVERAGE('stocks_combined'[Volume])
+		lineageTag: d20b1e85-d810-4bf5-8b10-0b52935a3cf1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Close Price' = MAX('stocks_combined'[Close])
+		lineageTag: 1f2fde95-77ab-494d-baa7-eccf3c47407b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Cumulative Return' =
+			
+			CALCULATE(
+			    DIVIDE(
+			        MAX('stocks_combined'[Close]) - CALCULATE(MIN('stocks_combined'[Close]), ALLSELECTED('DateTable')),
+			        CALCULATE(MIN('stocks_combined'[Close]), ALLSELECTED('DateTable'))
+			    )
+			)
+		lineageTag: 6a7bf7a7-3922-453c-98f4-24b5370db2bb
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Max Close Price' = MAX('stocks_combined'[Close])
+		lineageTag: 78217236-57bb-4936-aff3-9210162f5d7c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Min Close Price' = MIN('stocks_combined'[Close])
+		lineageTag: 25a4eb4f-01f3-4c31-9bfd-fd2b9bc57720
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Volatility =
+			
+			CALCULATE(
+			    STDEV.P('stocks_combined'[Daily Return %]),
+			    ALLEXCEPT('stocks_combined', 'stocks_combined'[Symbol])
+			)
+		formatString: #,0.00
+		lineageTag: 1a672606-6078-474c-9e40-f6e87407f40f
+
+	measure 'Max 7 Day Avg Close' =
+			
+			CALCULATE(
+			    MAX('stocks_combined'[7 Day Avg Close]),
+			    FILTER(
+			        'stocks_combined',
+			        'stocks_combined'[Date] >= DATE(2010,1,1)
+			            && 'stocks_combined'[Date] <= DATE(2025,4,25)  // latest date
+			    )
+			)
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: e17d9921-0130-46b5-beee-6320d02fa3c9
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Date of Max 7 Day Avg Close' =
+			
+			VAR MaxValue = [Max 7 Day Avg Close]
+			RETURN
+			CALCULATE(
+			    MIN('stocks_combined'[Date]),
+			    FILTER(
+			        'stocks_combined',
+			        [7 Day Avg Close] = MaxValue
+			            && 'stocks_combined'[Date] >= DATE(2010,1,1)
+			            && 'stocks_combined'[Date] <= DATE(2025,4,25)
+			    )
+			)
+		formatString: Short Date
+		lineageTag: 674ac6ee-33db-4889-9b7c-843fa2f3502d
+
+	measure 'Avg 7 Day Avg Close by Sector' =
+			
+			AVERAGEX(
+			    VALUES('stocks_combined'[Symbol]),
+			    CALCULATE(AVERAGE('stocks_combined'[7 Day Avg Close]))
+			)
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 819adaae-121b-4d27-8103-ac0259978e3f
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column Symbol
+		dataType: string
+		lineageTag: 4cbb2601-3ac4-4d0c-b417-78d23559335b
+		summarizeBy: none
+		sourceColumn: Symbol
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 7cbfcddf-f922-464e-8b5e-d682ef5e3191
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Open
+		dataType: double
+		lineageTag: 9e831d32-4586-4d00-b63b-d62bf30558ee
+		summarizeBy: sum
+		sourceColumn: Open
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column High
+		dataType: double
+		lineageTag: f60e04bc-dee4-43ac-b94f-8244390848aa
+		summarizeBy: sum
+		sourceColumn: High
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Low
+		dataType: double
+		lineageTag: 8ef3f84e-442f-4faa-b463-ce1082a8414d
+		summarizeBy: sum
+		sourceColumn: Low
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Close
+		dataType: double
+		lineageTag: 93231b4c-4eec-4455-b6f4-eb9a243aab71
+		summarizeBy: sum
+		sourceColumn: Close
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Adj Close'
+		dataType: double
+		lineageTag: bbf5fddf-628f-4b46-b971-6e6f2bad5629
+		summarizeBy: sum
+		sourceColumn: Adj Close
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Volume
+		dataType: int64
+		formatString: 0
+		lineageTag: f55d1059-6e5f-4ff9-8ef8-167d35cbe206
+		summarizeBy: sum
+		sourceColumn: Volume
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Previous Close' =
+			
+			VAR currentDate = 'stocks_combined'[Date]
+			VAR currentSymbol = 'stocks_combined'[Symbol]
+			RETURN
+			    CALCULATE(
+			        MAX('stocks_combined'[Close]),
+			        FILTER(
+			            'stocks_combined',
+			            'stocks_combined'[Symbol] = currentSymbol &&
+			            'stocks_combined'[Date] < currentDate
+			        )
+			    )
+		lineageTag: d589f651-6fbe-40d7-ab49-d56eb4d38751
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Daily Return %' =
+			
+			DIVIDE('stocks_combined'[Close] - 'stocks_combined'[Previous Close], 'stocks_combined'[Previous Close])
+		lineageTag: 17df80b3-220f-4322-8927-905eef818e19
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column '7 Day Avg Close' =
+			
+			AVERAGEX(
+			    DATESINPERIOD(
+			        'DateTable'[Date],
+			        'stocks_combined'[Date],
+			        -7,
+			        DAY
+			    ),
+			    'stocks_combined'[Close]
+			)
+		lineageTag: 41230e34-2224-4038-891c-96efb69bf0cd
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition stocks_combined = m
+		mode: import
+		source =
+				let
+				    Source = Table.Combine({stocks, #"new stocks"}),
+				    #"Removed Duplicates" = Table.Distinct(Source),
+				    #"Duplicated Column" = Table.DuplicateColumn(#"Removed Duplicates", "Date", "Date - Copy.1"),
+				    #"Removed Errors" = Table.RemoveRowsWithErrors(#"Duplicated Column", {"Date - Copy.1"}),
+				    #"Duplicated Column1" = Table.DuplicateColumn(#"Removed Errors", "Date", "Date - Copy.2"),
+				    #"Replaced Errors" = Table.ReplaceErrorValues(#"Duplicated Column1", {{"Date - Copy.2", #date(2025, 4, 26)}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Replaced Errors",{"Date - Copy.2", "Date - Copy.1"}),
+				    #"Sorted Rows" = Table.Sort(#"Removed Columns",{{"Date", Order.Descending}}),
+				    #"Replaced Errors1" = Table.ReplaceErrorValues(#"Sorted Rows", {{"Date", #date(2025, 4, 26)}})
+				in
+				    #"Replaced Errors1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

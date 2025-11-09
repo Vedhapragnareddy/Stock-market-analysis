@@ -1,0 +1,185 @@
+table stocks
+	lineageTag: a1c04d3d-eb8c-4a84-b78c-043d32d97790
+
+	measure '7 Day Avg Close2' =
+			
+			CALCULATE(
+			    AVERAGE('stocks'[Close]),
+			    DATESINPERIOD('DateTable'[Date], MAX('stocks'[Date]), -7, DAY)
+			)
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: b4ef64a8-ae80-476a-b35f-f755b57de3ae
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Avg Daily Volume2' = AVERAGE('stocks'[Volume])
+		lineageTag: 344b96ca-0af4-4d78-beb6-ed460ed4ac96
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Max Close Price2' = MAX('stocks'[Close])
+		lineageTag: 28e0bb1a-2744-45b4-9ea3-1bf4a9cdc683
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Min Close Price2' = MIN('stocks'[Close])
+		lineageTag: 9c87d89c-2000-459c-881a-5c95dc7c9eac
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Cumulative Return2' =
+			
+			CALCULATE(
+			    DIVIDE(
+			        MAX('stocks'[Close]) - CALCULATE(MIN('stocks'[Close]), ALLSELECTED('DateTable')),
+			        CALCULATE(MIN('stocks'[Close]), ALLSELECTED('DateTable'))
+			    )
+			)
+		lineageTag: df2c2cac-41ce-4023-a80c-93313ec5bfc1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Close Price2' = MAX('stocks'[Close])
+		lineageTag: 5750054b-a9c0-4b4a-a9ea-2e656862a058
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Volatility2 =
+			
+			CALCULATE(
+			    STDEV.P('stocks'[Daily Return %]),
+			    ALLEXCEPT('stocks', 'stocks'[Symbol])
+			)
+		lineageTag: 0cd6e6e8-4ec2-4216-aeb2-46077d7b7c4f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Symbol
+		dataType: string
+		lineageTag: 0c530c51-f02c-49d5-9434-ae7245f63d87
+		summarizeBy: none
+		sourceColumn: Symbol
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: b22be841-0a8c-4696-a606-235398e43a3a
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Open
+		dataType: double
+		lineageTag: 2a600116-5521-44bb-ae59-23c4fe3c5dd8
+		summarizeBy: sum
+		sourceColumn: Open
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column High
+		dataType: double
+		lineageTag: abd1c9d9-d4e2-4d6e-82ef-49025789bcde
+		summarizeBy: sum
+		sourceColumn: High
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Low
+		dataType: double
+		lineageTag: e062cba3-028f-46d1-9b79-991f72c29822
+		summarizeBy: sum
+		sourceColumn: Low
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Close
+		dataType: double
+		lineageTag: 68d3140b-22e0-48d2-9dee-3bde4218bfed
+		summarizeBy: sum
+		sourceColumn: Close
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Adj Close'
+		dataType: double
+		lineageTag: 66309995-706f-4361-9afe-c7b81af4be71
+		summarizeBy: sum
+		sourceColumn: Adj Close
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Volume
+		dataType: int64
+		formatString: 0
+		lineageTag: ab753294-fba4-44e2-9333-991b25eca679
+		summarizeBy: sum
+		sourceColumn: Volume
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Previous Close' =
+			
+			VAR currentDate = 'stocks'[Date]
+			VAR currentSymbol = 'stocks'[Symbol]
+			RETURN
+			    CALCULATE(
+			        MAX('stocks'[Close]),
+			        FILTER(
+			            'stocks',
+			            'stocks'[Symbol] = currentSymbol &&
+			            'stocks'[Date] < currentDate
+			        )
+			    )
+		lineageTag: 772c1918-d4d0-4a82-87e4-6ed21a306ed0
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Daily Return %' =
+			
+			DIVIDE('stocks'[Close] - 'stocks'[Previous Close], 'stocks'[Previous Close])
+		lineageTag: 5edc2ec7-a743-4c93-9476-128ec38ea0ee
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition stocks = m
+		mode: import
+		source =
+				let
+				    Source = Folder.Files("C:\Users\C837319113\Downloads\Power BI group project\Dataset\stocks"),
+				    #"Filtered Hidden Files1" = Table.SelectRows(Source, each [Attributes]?[Hidden]? <> true),
+				    #"Invoke Custom Function1" = Table.AddColumn(#"Filtered Hidden Files1", "Transform File", each #"Transform File"([Content])),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Invoke Custom Function1", {"Name", "Source.Name"}),
+				    #"Removed Other Columns1" = Table.SelectColumns(#"Renamed Columns1", {"Source.Name", "Transform File"}),
+				    #"Expanded Table Column1" = Table.ExpandTableColumn(#"Removed Other Columns1", "Transform File", Table.ColumnNames(#"Transform File"(#"Sample File"))),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Expanded Table Column1",{{"Source.Name", type text}, {"Date", type date}, {"Open", type number}, {"High", type number}, {"Low", type number}, {"Close", type number}, {"Adj Close", type number}, {"Volume", Int64.Type}}),
+				    #"Extracted Text Before Delimiter" = Table.TransformColumns(#"Changed Type", {{"Source.Name", each Text.BeforeDelimiter(_, ".csv"), type text}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Extracted Text Before Delimiter",{{"Source.Name", "Symbol"}}),
+				    #"Filtered Rows" = Table.SelectRows(#"Renamed Columns", each ([Symbol] = "AAPL" or [Symbol] = "BAC" or [Symbol] = "GILD" or [Symbol] = "JNJ" or [Symbol] = "JPM" or [Symbol] = "KO" or [Symbol] = "MSFT" or [Symbol] = "NVDA" or [Symbol] = "PFE" or [Symbol] = "TSLA"))
+				in
+				    #"Filtered Rows"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

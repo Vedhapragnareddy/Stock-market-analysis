@@ -1,0 +1,21 @@
+relationship e943db6b-a167-b1a5-bce7-cd7930de9cf0
+	fromColumn: stocks.Symbol
+	toColumn: StockSectors.Symbol
+
+relationship 714dfbd9-02b6-4817-8aee-3d539965086e
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'new stocks'.Date
+	toColumn: LocalDateTable_81b7db91-7c1b-4763-b93b-95546905e356.Date
+
+relationship AutoDetected_cb18dcab-8c9f-4abd-a74d-cf910ff915b1
+	fromColumn: stocks_combined.Symbol
+	toColumn: StockSectors.Symbol
+
+relationship 6cce87fd-6ee7-de5e-7f69-dae80d357701
+	fromColumn: stocks.Date
+	toColumn: DateTable.Date
+
+relationship 446ceb72-e776-c8f4-7861-16cc62ac051b
+	fromColumn: stocks_combined.Date
+	toColumn: DateTable.Date
+

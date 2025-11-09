@@ -1,0 +1,84 @@
+expression 'Sample File' =
+		let
+		    Source = Folder.Files("C:\Users\C837319113\Downloads\Power BI group project\Dataset\stocks"),
+		    Navigation1 = Source{0}[Content]
+		in
+		    Navigation1
+	lineageTag: d7d72192-11fb-4462-8956-b06722fabcae
+	queryGroup: 'Transform File from stocks\Helper Queries'
+
+	annotation PBI_ResultType = Binary
+
+expression Parameter1 = #"Sample File" meta [IsParameterQuery=true, BinaryIdentifier=#"Sample File", Type="Binary", IsParameterQueryRequired=true]
+	lineageTag: 2056af5d-a418-4885-99f4-4741ca4670a1
+	queryGroup: 'Transform File from stocks\Helper Queries'
+
+	annotation PBI_ResultType = Binary
+
+expression 'Transform Sample File' =
+		let
+		    Source = Csv.Document(Parameter1,[Delimiter=",", Columns=7, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+		    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true])
+		in
+		    #"Promoted Headers"
+	lineageTag: 7a28ffe0-890c-4217-b1c4-46f7453c600c
+	queryGroup: 'Transform File from stocks'
+
+	annotation PBI_ResultType = Table
+
+expression 'Transform File' =
+		let
+		    Source = (Parameter1 as binary) => let
+		    Source = Csv.Document(Parameter1,[Delimiter=",", Columns=7, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+		    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true])
+		in
+		    #"Promoted Headers"
+		in
+		    Source
+	mAttributes: [ FunctionQueryBinding = "{""exemplarFormulaName"":""Transform Sample File""}" ]
+	lineageTag: 967fe635-7cb2-40f5-a664-6f752634f9af
+	queryGroup: 'Transform File from stocks\Helper Queries'
+
+	annotation PBI_ResultType = Function
+
+expression 'Sample File (2)' =
+		let
+		    Source = Folder.Files("C:\Users\C837319113\Downloads\Power BI group project\Dataset\new stocks"),
+		    Navigation1 = Source{0}[Content]
+		in
+		    Navigation1
+	lineageTag: fb25e2f2-f463-42ea-b588-ae22418bbd60
+	queryGroup: 'Transform File from new stocks\Helper Queries'
+
+	annotation PBI_ResultType = Binary
+
+expression Parameter2 = #"Sample File (2)" meta [IsParameterQuery=true, BinaryIdentifier=#"Sample File (2)", Type="Binary", IsParameterQueryRequired=true]
+	lineageTag: 98c1e697-afcc-4515-9999-c60d0de5d224
+	queryGroup: 'Transform File from new stocks\Helper Queries'
+
+	annotation PBI_ResultType = Binary
+
+expression 'Transform Sample File (2)' =
+		let
+		    Source = Csv.Document(Parameter2,[Delimiter=",", Columns=6, Encoding=1252, QuoteStyle=QuoteStyle.None])
+		in
+		    Source
+	lineageTag: bb342b09-070d-4159-ab9c-2e7167855bfe
+	queryGroup: 'Transform File from new stocks'
+
+	annotation PBI_ResultType = Table
+
+expression 'Transform File (2)' =
+		let
+		    Source = (Parameter2 as binary) => let
+		    Source = Csv.Document(Parameter2,[Delimiter=",", Columns=6, Encoding=1252, QuoteStyle=QuoteStyle.None])
+		in
+		    Source
+		in
+		    Source
+	mAttributes: [ FunctionQueryBinding = "{""exemplarFormulaName"":""Transform Sample File (2)""}" ]
+	lineageTag: 8dbdb5ee-534d-42bd-ace6-96f661144f4f
+	queryGroup: 'Transform File from new stocks\Helper Queries'
+
+	annotation PBI_ResultType = Function
+
